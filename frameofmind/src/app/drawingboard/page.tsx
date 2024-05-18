@@ -3,6 +3,7 @@ import React from 'react';
 import 'react-canvas-paint/dist/index.css';
 import dynamic from 'next/dynamic';
 
+// @ts-ignore
 const ReactCanvasPaintNoSSR = dynamic(() => import('react-canvas-paint'), { ssr: false });
 
 function DrawingBoard() {
