@@ -114,7 +114,7 @@ import "./drawcanvas.css";
         };
 
         return (
-            <div className="App">
+            <div className="DrawCanvas">
                 <div className="draw-area">
                     <Menu
                         setLineColor={color => {
