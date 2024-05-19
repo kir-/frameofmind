@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import Menu from "./Menu";
+
+import Menu from "./menu";
 import "./drawcanvas.css";
 
 function DrawCanvas() {
@@ -33,35 +34,51 @@ function DrawCanvas() {
         ctx.lineWidth = isEraser ? 20 : lineWidth;
     }, [lineColor, lineOpacity, lineWidth, isEraser]);
 
-    //function for starting the drawing
+    // Function for starting the drawing
     const startDrawing = (e) => {
+        const { offsetX, offsetY } = e.nativeEvent;
         ctxRef.current.beginPath();
-        ctxRef.current.moveTo(
-            e.nativeEvent.offsetX,
-            e.nativeEvent.offsetY
-        );
+        ctxRef.current.moveTo(offsetX, offsetY);
         setIsDrawing(true);
     };
 
-    //function for ending the drawing
+    // Function for starting the drawing with touch
+    const startDrawingTouch = (e) => {
+        const rect = canvasRef.current.getBoundingClientRect();
+        const touch = e.touches[0];
+        const offsetX = touch.clientX - rect.left;
+        const offsetY = touch.clientY - rect.top;
+        ctxRef.current.beginPath();
+        ctxRef.current.moveTo(offsetX, offsetY);
+        setIsDrawing(true);
+    };
+
+    // Function for ending the drawing
     const endDrawing = () => {
         ctxRef.current.closePath();
         setIsDrawing(false);
     };
 
     const draw = (e) => {
-        if (!isDrawing) {
-            return;
-        }
-        ctxRef.current.lineTo(
-            e.nativeEvent.offsetX,
-            e.nativeEvent.offsetY
-        );
+        if (!isDrawing) return;
 
+        const { offsetX, offsetY } = e.nativeEvent;
+        ctxRef.current.lineTo(offsetX, offsetY);
         ctxRef.current.stroke();
     };
 
-    //function to convert drawing to image
+    const drawTouch = (e) => {
+        if (!isDrawing) return;
+
+        const rect = canvasRef.current.getBoundingClientRect();
+        const touch = e.touches[0];
+        const offsetX = touch.clientX - rect.left;
+        const offsetY = touch.clientY - rect.top;
+        ctxRef.current.lineTo(offsetX, offsetY);
+        ctxRef.current.stroke();
+    };
+
+    // Function to convert drawing to image
     const convertToImage = () => {
         const canvas = canvasRef.current;
         const dataURL = canvas.toDataURL(); // Convert canvas to data URL
@@ -109,6 +126,9 @@ function DrawCanvas() {
                     onMouseDown={startDrawing}
                     onMouseUp={endDrawing}
                     onMouseMove={draw}
+                    onTouchStart={startDrawingTouch}
+                    onTouchEnd={endDrawing}
+                    onTouchMove={drawTouch}
                     ref={canvasRef}
                     width={`1280px`}
                     height={`600px`}
