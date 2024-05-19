@@ -9,7 +9,7 @@ const ReactCanvasPaintNoSSR = dynamic(() => import('react-canvas-paint'), { ssr:
 
 function DrawingBoard() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+    <main className="flex min-h-screen flex-col items-center justify-center px-24 py-5">
       <h1 className="text-4xl font-bold mb-8">Drawing Board</h1>
       <div className="w-full max-w-m"> {/* Set the maximum width of the canvas container */}
         {/* <ReactCanvasPaintNoSSR/> */}
